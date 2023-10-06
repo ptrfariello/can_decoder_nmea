@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from can_decoder_nmea.Signal import Signal
+from can_decoder.Signal import Signal
 
 
 class Frame(object):

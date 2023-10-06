@@ -1,24 +1,24 @@
-import can_decoder_nmea
+import can_decoder
 
 import pandas as pd
 
 from datetime import datetime, timedelta, timezone
 
 
-def setup_db_j1939() -> can_decoder_nmea.SignalDB:
+def setup_db_j1939() -> can_decoder.SignalDB:
     """Helper function to setup example decoding rules for J1939.
     
     :return: Database with example J1939 decoding rules.
     """
     # Special decoding rules are required for J1939, so specify the protocol.
-    db = can_decoder_nmea.SignalDB(protocol="J1939")
+    db = can_decoder.SignalDB(protocol="J1939")
     
-    frame = can_decoder_nmea.Frame(
+    frame = can_decoder.Frame(
         frame_id=0x0CF00401,
         frame_size=8
     )
     
-    signal_a = can_decoder_nmea.Signal(
+    signal_a = can_decoder.Signal(
         signal_name="EngineSpeed",
         signal_offset=0,
         signal_start_bit=32,
@@ -36,20 +36,20 @@ def setup_db_j1939() -> can_decoder_nmea.SignalDB:
     return db
 
 
-def setup_db_obd2() -> can_decoder_nmea.SignalDB:
+def setup_db_obd2() -> can_decoder.SignalDB:
     """Helper function to setup example decoding rules for OBD2.
 
     :return: Database with example OBD2 decoding rules.
     """
     # While not required for correct decoding, OBD2 is specified as the protocol type.
-    db = can_decoder_nmea.SignalDB(protocol="OBD2")
+    db = can_decoder.SignalDB(protocol="OBD2")
     
-    frame = can_decoder_nmea.Frame(
+    frame = can_decoder.Frame(
         frame_id=0x000007E8,
         frame_size=8
     )
     
-    signal_main_mux = can_decoder_nmea.Signal(
+    signal_main_mux = can_decoder.Signal(
         signal_name="ServiceMux",
         signal_start_bit=8,
         signal_size=8,
@@ -60,7 +60,7 @@ def setup_db_obd2() -> can_decoder_nmea.SignalDB:
         signal_is_signed=False,
     )
     
-    signal_minor_mux = can_decoder_nmea.Signal(
+    signal_minor_mux = can_decoder.Signal(
         signal_name="PIDMux",
         signal_start_bit=16,
         signal_size=8,
@@ -71,7 +71,7 @@ def setup_db_obd2() -> can_decoder_nmea.SignalDB:
         signal_is_signed=False,
     )
     
-    signal_engine = can_decoder_nmea.Signal(
+    signal_engine = can_decoder.Signal(
         signal_name="EngineRPM",
         signal_start_bit=24,
         signal_size=16,
@@ -124,7 +124,7 @@ def example_manual_j1939():
         }
     ]
     
-    result = can_decoder_nmea.IteratorDecoder(frames, setup_db_j1939())
+    result = can_decoder.IteratorDecoder(frames, setup_db_j1939())
     for r in result:
         print(r)
     
@@ -165,7 +165,7 @@ def example_manual_obd2():
 
     test_data = pd.DataFrame(frames).set_index("TimeStamp")
     
-    decoder = can_decoder_nmea.DataFrameDecoder(setup_db_obd2())
+    decoder = can_decoder.DataFrameDecoder(setup_db_obd2())
     result = decoder.decode_frame(test_data)
     
     print(result)

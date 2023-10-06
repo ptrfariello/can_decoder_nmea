@@ -1,5 +1,5 @@
 import pytest
-import can_decoder_nmea
+import can_decoder
 import ctypes
 
 from datetime import datetime, timezone
@@ -36,17 +36,17 @@ def int2twos(val, bits):  # pragma: no cover
 
 class TestIteratorCustom(object):
     @pytest.fixture()
-    def setup_db(self) -> can_decoder_nmea.SignalDB:
+    def setup_db(self) -> can_decoder.SignalDB:
         # Create new DB with no protocol.
-        db = can_decoder_nmea.SignalDB()
+        db = can_decoder.SignalDB()
         
         # Add frame.
-        frame = can_decoder_nmea.Frame(
+        frame = can_decoder.Frame(
             frame_id=0x80000001,
             frame_size=8
         )
         
-        signal_cj_temp = can_decoder_nmea.Signal(
+        signal_cj_temp = can_decoder.Signal(
             signal_name="CJTemp",
             signal_start_bit=0,
             signal_size=8,
@@ -54,7 +54,7 @@ class TestIteratorCustom(object):
             signal_is_signed=True,
         )
         
-        signal_hj1_temp = can_decoder_nmea.Signal(
+        signal_hj1_temp = can_decoder.Signal(
             signal_name="HJ1Temp",
             signal_start_bit=10,
             signal_size=12,
@@ -62,7 +62,7 @@ class TestIteratorCustom(object):
             signal_is_signed=True,
         )
         
-        signal_hj2_temp = can_decoder_nmea.Signal(
+        signal_hj2_temp = can_decoder.Signal(
             signal_name="HJ2Temp",
             signal_start_bit=24,
             signal_size=12,
@@ -70,7 +70,7 @@ class TestIteratorCustom(object):
             signal_is_signed=True,
         )
         
-        signal_hj3_temp = can_decoder_nmea.Signal(
+        signal_hj3_temp = can_decoder.Signal(
             signal_name="HJ3Temp",
             signal_start_bit=38,
             signal_size=12,
@@ -78,7 +78,7 @@ class TestIteratorCustom(object):
             signal_is_signed=True,
         )
         
-        signal_hj4_temp = can_decoder_nmea.Signal(
+        signal_hj4_temp = can_decoder.Signal(
             signal_name="HJ4Temp",
             signal_start_bit=52,
             signal_size=12,
@@ -86,28 +86,28 @@ class TestIteratorCustom(object):
             signal_is_signed=True,
         )
         
-        signal_hj1_err = can_decoder_nmea.Signal(
+        signal_hj1_err = can_decoder.Signal(
             signal_name="HJ1Err",
             signal_start_bit=8,
             signal_size=2,
             signal_is_signed=False,
         )
         
-        signal_hj2_err = can_decoder_nmea.Signal(
+        signal_hj2_err = can_decoder.Signal(
             signal_name="HJ2Err",
             signal_start_bit=22,
             signal_size=2,
             signal_is_signed=False,
         )
         
-        signal_hj3_err = can_decoder_nmea.Signal(
+        signal_hj3_err = can_decoder.Signal(
             signal_name="HJ3Err",
             signal_start_bit=36,
             signal_size=2,
             signal_is_signed=False,
         )
         
-        signal_hj4_err = can_decoder_nmea.Signal(
+        signal_hj4_err = can_decoder.Signal(
             signal_name="HJ4Err",
             signal_start_bit=50,
             signal_size=2,
@@ -154,46 +154,46 @@ class TestIteratorCustom(object):
         
         # Setup expected result.
         expected = [
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='CJTemp',
-                                           SignalValueRaw=25, SignalValuePhysical=25.0),
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ1Temp',
-                                           SignalValueRaw=1, SignalValuePhysical=1.0),
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ1Err',
-                                           SignalValueRaw=0, SignalValuePhysical=0.0),
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ2Temp',
-                                           SignalValueRaw=10, SignalValuePhysical=10.0),
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ2Err',
-                                           SignalValueRaw=1, SignalValuePhysical=1.0),
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ3Temp',
-                                           SignalValueRaw=100, SignalValuePhysical=100.0),
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ3Err',
-                                           SignalValueRaw=2, SignalValuePhysical=2.0),
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ4Temp',
-                                           SignalValueRaw=1000, SignalValuePhysical=1000.0),
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ4Err',
-                                           SignalValueRaw=3, SignalValuePhysical=3.0),
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='CJTemp',
-                                           SignalValueRaw=231, SignalValuePhysical=-25.0),
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ1Temp',
-                                           SignalValueRaw=65535, SignalValuePhysical=-1.0),
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ1Err',
-                                           SignalValueRaw=0, SignalValuePhysical=0.0),
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ2Temp',
-                                           SignalValueRaw=65526, SignalValuePhysical=-10.0),
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ2Err',
-                                           SignalValueRaw=1, SignalValuePhysical=1.0),
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ3Temp',
-                                           SignalValueRaw=65436, SignalValuePhysical=-100.0),
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ3Err',
-                                           SignalValueRaw=2, SignalValuePhysical=2.0),
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ4Temp',
-                                           SignalValueRaw=64536, SignalValuePhysical=-1000.0),
-            can_decoder_nmea.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ4Err',
-                                           SignalValueRaw=3, SignalValuePhysical=3.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='CJTemp',
+                                      SignalValueRaw=25, SignalValuePhysical=25.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ1Temp',
+                                      SignalValueRaw=1, SignalValuePhysical=1.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ1Err',
+                                      SignalValueRaw=0, SignalValuePhysical=0.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ2Temp',
+                                      SignalValueRaw=10, SignalValuePhysical=10.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ2Err',
+                                      SignalValueRaw=1, SignalValuePhysical=1.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ3Temp',
+                                      SignalValueRaw=100, SignalValuePhysical=100.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ3Err',
+                                      SignalValueRaw=2, SignalValuePhysical=2.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ4Temp',
+                                      SignalValueRaw=1000, SignalValuePhysical=1000.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ4Err',
+                                      SignalValueRaw=3, SignalValuePhysical=3.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='CJTemp',
+                                      SignalValueRaw=231, SignalValuePhysical=-25.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ1Temp',
+                                      SignalValueRaw=65535, SignalValuePhysical=-1.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ1Err',
+                                      SignalValueRaw=0, SignalValuePhysical=0.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ2Temp',
+                                      SignalValueRaw=65526, SignalValuePhysical=-10.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ2Err',
+                                      SignalValueRaw=1, SignalValuePhysical=1.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ3Temp',
+                                      SignalValueRaw=65436, SignalValuePhysical=-100.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ3Err',
+                                      SignalValueRaw=2, SignalValuePhysical=2.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ4Temp',
+                                      SignalValueRaw=64536, SignalValuePhysical=-1000.0),
+            can_decoder.DecodedSignal(TimeStamp=datetime(2000, 1, 1, 0, 0, 1).replace(tzinfo=timezone.utc), CanID=0x80000001, Signal='HJ4Err',
+                                      SignalValueRaw=3, SignalValuePhysical=3.0),
         ]
         
         # Test.
-        uut = can_decoder_nmea.IteratorDecoder(test_data, conversion_rules=conversion_rules)
+        uut = can_decoder.IteratorDecoder(test_data, conversion_rules=conversion_rules)
         
         result = list(uut)
         

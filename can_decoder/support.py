@@ -1,4 +1,4 @@
-from can_decoder_nmea.Signal import Signal
+from can_decoder.Signal import Signal
 
 
 def get_j1939_limit(number_of_bits: int) -> int:

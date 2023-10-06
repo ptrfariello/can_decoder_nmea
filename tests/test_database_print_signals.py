@@ -1,6 +1,6 @@
 import pytest
 
-import can_decoder_nmea
+import can_decoder
 
 
 @pytest.mark.env("canmatrix")
@@ -8,14 +8,14 @@ class TestSignalDBPrintSignals(object):
 
     def test_print_with_multiplex(self):
         # Setup decoding rules.
-        db = can_decoder_nmea.SignalDB(protocol="OBD2")
+        db = can_decoder.SignalDB(protocol="OBD2")
     
-        frame = can_decoder_nmea.Frame(
+        frame = can_decoder.Frame(
             frame_id=0x000007E8,
             frame_size=8
         )
     
-        signal_main_mux = can_decoder_nmea.Signal(
+        signal_main_mux = can_decoder.Signal(
             signal_name="ServiceMux",
             signal_start_bit=8,
             signal_size=8,
@@ -26,7 +26,7 @@ class TestSignalDBPrintSignals(object):
             signal_is_signed=False,
         )
     
-        signal_minor_mux = can_decoder_nmea.Signal(
+        signal_minor_mux = can_decoder.Signal(
             signal_name="PIDMux",
             signal_start_bit=16,
             signal_size=8,
@@ -37,7 +37,7 @@ class TestSignalDBPrintSignals(object):
             signal_is_signed=False,
         )
     
-        signal_engine = can_decoder_nmea.Signal(
+        signal_engine = can_decoder.Signal(
             signal_name="EngineRPM",
             signal_start_bit=24,
             signal_size=16,

@@ -1,4 +1,4 @@
-from can_decoder_nmea.exceptions.CANDecoderException import CANDecoderException
+from can_decoder.exceptions.CANDecoderException import CANDecoderException
 
 
 class DataSizeMismatchException(CANDecoderException):

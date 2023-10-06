@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from random import randint
 
 import pytest
-import can_decoder_nmea
+import can_decoder
 
 from tests.FillType import FillType
 
@@ -13,14 +13,14 @@ class TestIteratorManualJ1939(object):
     def db_j1939(self):
         # Setup decoding rules.
         # NOTE: This is just re-using the ODB2 rules, but marking the DB as using J1939 rules.
-        db = can_decoder_nmea.SignalDB(protocol="J1939")
+        db = can_decoder.SignalDB(protocol="J1939")
         
-        frame = can_decoder_nmea.Frame(
+        frame = can_decoder.Frame(
             frame_id=0x8CF004FE,
             frame_size=8
         )
         
-        signal_main_mux = can_decoder_nmea.Signal(
+        signal_main_mux = can_decoder.Signal(
             signal_name="ServiceMux",
             signal_start_bit=8,
             signal_size=8,
@@ -31,7 +31,7 @@ class TestIteratorManualJ1939(object):
             signal_is_signed=False,
         )
         
-        signal_minor_mux = can_decoder_nmea.Signal(
+        signal_minor_mux = can_decoder.Signal(
             signal_name="PIDMux",
             signal_start_bit=16,
             signal_size=8,
@@ -42,7 +42,7 @@ class TestIteratorManualJ1939(object):
             signal_is_signed=False,
         )
         
-        signal_engine = can_decoder_nmea.Signal(
+        signal_engine = can_decoder.Signal(
             signal_name="EngineRPM",
             signal_start_bit=24,
             signal_size=16,
@@ -98,7 +98,7 @@ class TestIteratorManualJ1939(object):
         ]
         
         expected = [
-            can_decoder_nmea.DecodedSignal(
+            can_decoder.DecodedSignal(
                 TimeStamp=timestamp,
                 CanID=id,
                 Signal=signal_name,
@@ -108,7 +108,7 @@ class TestIteratorManualJ1939(object):
         ]
         
         # Setup UUT.
-        uut = can_decoder_nmea.IteratorDecoder(frames, db_j1939)
+        uut = can_decoder.IteratorDecoder(frames, db_j1939)
         
         result = list(uut)
         
@@ -131,9 +131,9 @@ class TestIteratorManualJ1939(object):
         ]
         
         # Setup UUT.
-        uut = can_decoder_nmea.IteratorDecoder(frames, db_j1939)
+        uut = can_decoder.IteratorDecoder(frames, db_j1939)
         
-        with pytest.warns(can_decoder_nmea.CANDecoderWarning):
+        with pytest.warns(can_decoder.CANDecoderWarning):
             result = list(uut)
         
         assert len(result) == 0
@@ -154,7 +154,7 @@ class TestIteratorManualJ1939(object):
         ]
         
         # Setup UUT.
-        uut = can_decoder_nmea.IteratorDecoder(frames, db_j1939)
+        uut = can_decoder.IteratorDecoder(frames, db_j1939)
         
         result = list(uut)
         

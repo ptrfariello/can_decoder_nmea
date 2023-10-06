@@ -3,7 +3,7 @@ import pytest
 from io import BytesIO
 from pathlib import Path
 
-import can_decoder_nmea
+import can_decoder
 from tests.LoadDBCPathType import LoadDBCPathType
 
 
@@ -23,18 +23,18 @@ class TestLoadDBC(object):
         dbc_base_path = Path(__file__).parent.parent / "examples" / "CSS-Electronics-SAE-J1939-DEMO.dbc"
 
         if input_type == LoadDBCPathType.LoadDBCPathType_STR:
-            result = can_decoder_nmea.load_dbc(str(dbc_base_path))
+            result = can_decoder.load_dbc(str(dbc_base_path))
         elif input_type == LoadDBCPathType.LoadDBCPathType_PATH:
-            result = can_decoder_nmea.load_dbc(dbc_base_path)
+            result = can_decoder.load_dbc(dbc_base_path)
         elif input_type == LoadDBCPathType.LoadDBCPathType_FILE:
             with open(dbc_base_path, "rb") as handle:
-                result = can_decoder_nmea.load_dbc(handle)
+                result = can_decoder.load_dbc(handle)
         elif input_type == LoadDBCPathType.LoadDBCPathType_MEMORY:
             with open(dbc_base_path, "rb") as handle:
                 raw = handle.read()
 
             with BytesIO(raw) as handle:
-                result = can_decoder_nmea.load_dbc(handle)
+                result = can_decoder.load_dbc(handle)
 
         # Ensure that a DB is loaded.
         assert result is not None, "Expected a DB to be loaded"
@@ -46,7 +46,7 @@ class TestLoadDBC(object):
         frame_ids = [0x8CF004FE, 0x98FEF1FE]
         assert len(result.frames) == len(frame_ids)
 
-        frame_eec1 = result.frames[0x8CF004FE]  # type: can_decoder_nmea.Frame
+        frame_eec1 = result.frames[0x8CF004FE]  # type: can_decoder.Frame
         assert frame_eec1.id == 0x8CF004FE
         assert frame_eec1.multiplexer is None
         assert frame_eec1.size == 8
@@ -63,7 +63,7 @@ class TestLoadDBC(object):
         assert signal_engine_speed.size == 16
         assert signal_engine_speed.start_bit == 24
 
-        frame_ccv1 = result.frames[0x98FEF1FE]  # type: can_decoder_nmea.Frame
+        frame_ccv1 = result.frames[0x98FEF1FE]  # type: can_decoder.Frame
         assert frame_ccv1.id == 0x98FEF1FE
         assert frame_ccv1.multiplexer is None
         assert frame_ccv1.size == 8
@@ -99,18 +99,18 @@ class TestLoadDBC(object):
         }
         
         if input_type == LoadDBCPathType.LoadDBCPathType_STR:
-            result = can_decoder_nmea.load_dbc(str(dbc_base_path), **kwargs)
+            result = can_decoder.load_dbc(str(dbc_base_path), **kwargs)
         elif input_type == LoadDBCPathType.LoadDBCPathType_PATH:
-            result = can_decoder_nmea.load_dbc(dbc_base_path, **kwargs)
+            result = can_decoder.load_dbc(dbc_base_path, **kwargs)
         elif input_type == LoadDBCPathType.LoadDBCPathType_FILE:
             with open(dbc_base_path, "rb") as handle:
-                result = can_decoder_nmea.load_dbc(handle, **kwargs)
+                result = can_decoder.load_dbc(handle, **kwargs)
         elif input_type == LoadDBCPathType.LoadDBCPathType_MEMORY:
             with open(dbc_base_path, "rb") as handle:
                 raw = handle.read()
         
             with BytesIO(raw) as handle:
-                result = can_decoder_nmea.load_dbc(handle, **kwargs)
+                result = can_decoder.load_dbc(handle, **kwargs)
     
         # Ensure that a DB is loaded.
         assert result is not None, "Expected a DB to be loaded"
@@ -122,7 +122,7 @@ class TestLoadDBC(object):
         frame_ids = [0x8CF004FE, 0x98FEF1FE]
         assert len(result.frames) == len(frame_ids)
     
-        frame_eec1 = result.frames[0x8CF004FE]  # type: can_decoder_nmea.Frame
+        frame_eec1 = result.frames[0x8CF004FE]  # type: can_decoder.Frame
         assert frame_eec1.id == 0x8CF004FE
         assert frame_eec1.multiplexer is None
         assert frame_eec1.size == 8
@@ -139,7 +139,7 @@ class TestLoadDBC(object):
         assert signal_engine_speed.size == 16
         assert signal_engine_speed.start_bit == 24
     
-        frame_ccv1 = result.frames[0x98FEF1FE]  # type: can_decoder_nmea.Frame
+        frame_ccv1 = result.frames[0x98FEF1FE]  # type: can_decoder.Frame
         assert frame_ccv1.id == 0x98FEF1FE
         assert frame_ccv1.multiplexer is None
         assert frame_ccv1.size == 8
@@ -167,18 +167,18 @@ class TestLoadDBC(object):
         dbc_base_path = Path(__file__).parent.parent / "examples" / "CSS-Electronics-OBD2-v1.3.dbc"
 
         if input_type == LoadDBCPathType.LoadDBCPathType_STR:
-            result = can_decoder_nmea.load_dbc(str(dbc_base_path))
+            result = can_decoder.load_dbc(str(dbc_base_path))
         elif input_type == LoadDBCPathType.LoadDBCPathType_PATH:
-            result = can_decoder_nmea.load_dbc(dbc_base_path)
+            result = can_decoder.load_dbc(dbc_base_path)
         elif input_type == LoadDBCPathType.LoadDBCPathType_FILE:
             with open(dbc_base_path, "rb") as handle:
-                result = can_decoder_nmea.load_dbc(handle)
+                result = can_decoder.load_dbc(handle)
         elif input_type == LoadDBCPathType.LoadDBCPathType_MEMORY:
             with open(dbc_base_path, "rb") as handle:
                 raw = handle.read()
 
             with BytesIO(raw) as handle:
-                result = can_decoder_nmea.load_dbc(handle)
+                result = can_decoder.load_dbc(handle)
 
         # Ensure that a DB is loaded.
         assert result is not None, "Expected a DB to be loaded"
@@ -190,7 +190,7 @@ class TestLoadDBC(object):
         assert len(result.frames) == 1
         assert 0x7E8 in result.frames.keys()
 
-        frame = result.frames[0x7E8]  # type: can_decoder_nmea.Frame
+        frame = result.frames[0x7E8]  # type: can_decoder.Frame
         assert frame.id == 0x7E8
         assert frame.multiplexer is not None
         assert frame.size == 8
@@ -250,6 +250,6 @@ class TestLoadDBC(object):
 
     def test_load_with_invalid_object(self):
         with pytest.raises(OSError):
-            can_decoder_nmea.load_dbc(45)
+            can_decoder.load_dbc(45)
 
     pass

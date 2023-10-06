@@ -1,4 +1,4 @@
-import can_decoder_nmea
+import can_decoder
 import mdf_iter
 
 from pathlib import Path
@@ -22,10 +22,10 @@ def example_decode_using_dateframe_j1939_a():
     dbc_path = Path(__file__).parent / "CSS-Electronics-SAE-J1939-DEMO.dbc"
 
     # Import the decoding rules.
-    db = can_decoder_nmea.load_dbc(dbc_path)
+    db = can_decoder.load_dbc(dbc_path)
     
     # Create decoder.
-    dataframe_decoder = can_decoder_nmea.DataFrameDecoder(db)
+    dataframe_decoder = can_decoder.DataFrameDecoder(db)
     
     # Setup filesystem and which log file to decode.
     fs = setup_fs()
@@ -55,10 +55,10 @@ def example_decode_using_dateframe_j1939_b():
     dbc_path = Path(__file__).parent / "CSS-Electronics-SAE-J1939-DEMO.dbc"
     
     # Import the decoding rules.
-    db = can_decoder_nmea.load_dbc(dbc_path, use_custom_attribute="SPN")
+    db = can_decoder.load_dbc(dbc_path, use_custom_attribute="SPN")
     
     # Create decoder.
-    dataframe_decoder = can_decoder_nmea.DataFrameDecoder(db)
+    dataframe_decoder = can_decoder.DataFrameDecoder(db)
     
     # Setup filesystem and which log file to decode.
     fs = setup_fs()
@@ -88,10 +88,10 @@ def example_decode_using_dateframe_obd2():
     dbc_path = Path(__file__).parent / "CSS-Electronics-OBD2-v1.3.dbc"
     
     # Import the decoding rules.
-    db = can_decoder_nmea.load_dbc(dbc_path)
+    db = can_decoder.load_dbc(dbc_path)
     
     # Create decoder.
-    dataframe_decoder = can_decoder_nmea.DataFrameDecoder(db)
+    dataframe_decoder = can_decoder.DataFrameDecoder(db)
     
     # Setup filesystem and which log file to decode.
     fs = setup_fs()

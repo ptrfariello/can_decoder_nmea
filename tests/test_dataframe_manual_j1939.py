@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-import can_decoder_nmea
+import can_decoder
 import pytest
 
 try:
@@ -16,14 +16,14 @@ class TestDataFrameManualJ1939(object):
     @pytest.fixture()
     def db_j1939(self):
         # Setup decoding rules.
-        db = can_decoder_nmea.SignalDB(protocol="J1939")
+        db = can_decoder.SignalDB(protocol="J1939")
         
-        frame = can_decoder_nmea.Frame(
+        frame = can_decoder.Frame(
             frame_id=0x8CF004FE,
             frame_size=8
         )
         
-        signal_engine_speed = can_decoder_nmea.Signal(
+        signal_engine_speed = can_decoder.Signal(
             signal_name="EngineSpeed",
             signal_start_bit=24,
             signal_size=16,
@@ -42,7 +42,7 @@ class TestDataFrameManualJ1939(object):
     
     @pytest.fixture()
     def uut(self, db_j1939):
-        decoder = can_decoder_nmea.DataFrameDecoder(db_j1939)
+        decoder = can_decoder.DataFrameDecoder(db_j1939)
         
         return decoder
     
@@ -141,7 +141,7 @@ class TestDataFrameManualJ1939(object):
     
         test_data = pd.DataFrame(frames).set_index("TimeStamp")
 
-        with pytest.warns(can_decoder_nmea.CANDecoderWarning):
+        with pytest.warns(can_decoder.CANDecoderWarning):
             result = uut.decode_frame(test_data)
         
         assert result.size == 0

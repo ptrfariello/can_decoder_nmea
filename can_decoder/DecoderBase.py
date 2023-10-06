@@ -5,10 +5,10 @@ import numpy as np
 from abc import ABCMeta, abstractmethod
 from typing import List, Optional
 
-from can_decoder_nmea.Signal import Signal
-from can_decoder_nmea.SignalDB import SignalDB
-from can_decoder_nmea.warnings.MissingDataWarning import MissingDataWarning
-from can_decoder_nmea.warnings.DataSizeMismatchWarning import DataSizeMismatchWarning
+from can_decoder.Signal import Signal
+from can_decoder.SignalDB import SignalDB
+from can_decoder.warnings.MissingDataWarning import MissingDataWarning
+from can_decoder.warnings.DataSizeMismatchWarning import DataSizeMismatchWarning
 
 
 class DecoderBase(object, metaclass=ABCMeta):

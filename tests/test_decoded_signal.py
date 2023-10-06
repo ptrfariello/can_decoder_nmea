@@ -1,4 +1,4 @@
-import can_decoder_nmea
+import can_decoder
 import copy
 
 from datetime import datetime, timedelta, timezone
@@ -12,7 +12,7 @@ class TestDecodedSignal(object):
         signal_value_raw = 12850
         signal_value_scaled = 12850.25
         
-        object_a = can_decoder_nmea.iterator.DecodedSignal(
+        object_a = can_decoder.iterator.DecodedSignal(
             TimeStamp=timestamp,
             CanID=id,
             Signal=signal_name,
@@ -20,7 +20,7 @@ class TestDecodedSignal(object):
             SignalValuePhysical=signal_value_scaled
         )
 
-        object_b = can_decoder_nmea.iterator.DecodedSignal(
+        object_b = can_decoder.iterator.DecodedSignal(
             TimeStamp=timestamp,
             CanID=id,
             Signal=signal_name,
@@ -39,7 +39,7 @@ class TestDecodedSignal(object):
         signal_value_raw = 12850
         signal_value_scaled = 12850.25
     
-        object_a = can_decoder_nmea.iterator.DecodedSignal(
+        object_a = can_decoder.iterator.DecodedSignal(
             TimeStamp=timestamp,
             CanID=id,
             Signal=signal_name,
@@ -47,7 +47,7 @@ class TestDecodedSignal(object):
             SignalValuePhysical=signal_value_scaled
         )
     
-        object_b = can_decoder_nmea.iterator.DecodedSignal(
+        object_b = can_decoder.iterator.DecodedSignal(
             TimeStamp=copy.deepcopy(timestamp),
             CanID=copy.deepcopy(id),
             Signal=copy.deepcopy(signal_name),
@@ -66,7 +66,7 @@ class TestDecodedSignal(object):
         signal_value_raw = 12850
         signal_value_scaled = 12850.25
     
-        object_a = can_decoder_nmea.iterator.DecodedSignal(
+        object_a = can_decoder.iterator.DecodedSignal(
             TimeStamp=timestamp,
             CanID=id,
             Signal=signal_name,
@@ -74,7 +74,7 @@ class TestDecodedSignal(object):
             SignalValuePhysical=signal_value_scaled
         )
     
-        object_b = can_decoder_nmea.iterator.DecodedSignal(
+        object_b = can_decoder.iterator.DecodedSignal(
             TimeStamp=timestamp + timedelta(microseconds=1),
             CanID=id,
             Signal=signal_name,
@@ -93,7 +93,7 @@ class TestDecodedSignal(object):
         signal_value_raw = 12850
         signal_value_scaled = 12850.25
     
-        object_a = can_decoder_nmea.iterator.DecodedSignal(
+        object_a = can_decoder.iterator.DecodedSignal(
             TimeStamp=timestamp,
             CanID=id,
             Signal=signal_name,
@@ -101,7 +101,7 @@ class TestDecodedSignal(object):
             SignalValuePhysical=signal_value_scaled
         )
     
-        object_b = can_decoder_nmea.iterator.DecodedSignal(
+        object_b = can_decoder.iterator.DecodedSignal(
             TimeStamp=timestamp,
             CanID=id + 1,
             Signal=signal_name,
@@ -120,7 +120,7 @@ class TestDecodedSignal(object):
         signal_value_raw = 12850
         signal_value_scaled = 12850.25
 
-        object_a = can_decoder_nmea.iterator.DecodedSignal(
+        object_a = can_decoder.iterator.DecodedSignal(
             TimeStamp=timestamp,
             CanID=id,
             Signal=signal_name,
@@ -128,7 +128,7 @@ class TestDecodedSignal(object):
             SignalValuePhysical=signal_value_scaled
         )
 
-        object_b = can_decoder_nmea.iterator.DecodedSignal(
+        object_b = can_decoder.iterator.DecodedSignal(
             TimeStamp=timestamp,
             CanID=id,
             Signal="DifferentSignal",
@@ -147,7 +147,7 @@ class TestDecodedSignal(object):
         signal_value_raw = 12850
         signal_value_scaled = 12850.25
 
-        object_a = can_decoder_nmea.iterator.DecodedSignal(
+        object_a = can_decoder.iterator.DecodedSignal(
             TimeStamp=timestamp,
             CanID=id,
             Signal=signal_name,
@@ -155,7 +155,7 @@ class TestDecodedSignal(object):
             SignalValuePhysical=signal_value_scaled
         )
 
-        object_b = can_decoder_nmea.iterator.DecodedSignal(
+        object_b = can_decoder.iterator.DecodedSignal(
             TimeStamp=timestamp,
             CanID=id,
             Signal=signal_name,
@@ -174,7 +174,7 @@ class TestDecodedSignal(object):
         signal_value_raw = 12850
         signal_value_scaled = 12850.25
 
-        object_a = can_decoder_nmea.iterator.DecodedSignal(
+        object_a = can_decoder.iterator.DecodedSignal(
             TimeStamp=timestamp,
             CanID=id,
             Signal=signal_name,
@@ -182,7 +182,7 @@ class TestDecodedSignal(object):
             SignalValuePhysical=signal_value_scaled
         )
 
-        object_b = can_decoder_nmea.iterator.DecodedSignal(
+        object_b = can_decoder.iterator.DecodedSignal(
             TimeStamp=timestamp,
             CanID=id,
             Signal=signal_name,
