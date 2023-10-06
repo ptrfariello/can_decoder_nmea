@@ -15,7 +15,7 @@ class DecoderBase(object, metaclass=ABCMeta):
     def __init__(self, conversion_rules: SignalDB):
         self._db = conversion_rules
         return
-    
+
     @classmethod
     @abstractmethod
     def get_supported_protocols(cls) -> List[Optional[str]]:
@@ -39,37 +39,37 @@ class DecoderBase(object, metaclass=ABCMeta):
         # Determine the start and stop bits.
         start_bit = signal.start_bit
         stop_bit = signal.start_bit + signal.size
-    
+
         # Extract the bytes relevant for the signal.
         start_byte = start_bit // 8
         stop_byte = stop_bit // 8
-    
+
         if stop_bit % 8 != 0:
             stop_byte += 1
-    
+
         reduced_data = data[:, start_byte:stop_byte]  # type: np.ndarray
-        
+
         if reduced_data.size == 0:
             warnings.warn("No data found for signal {}".format(signal), MissingDataWarning)
             return np.empty(shape=(data.shape[0], 0))
-    
+
         # Determine how to read the data depending on the endianness.
         if signal.is_little_endian:
             reduced_data_bits = np.unpackbits(reduced_data, axis=1, bitorder="little")
         else:
             reduced_data_bits = np.unpackbits(reduced_data, axis=1, bitorder="big")
-    
+
         # Extract the signal bits, ignoring the surrounding data.
         subbyte_start_position = start_bit % 8
         bit_data_trail = reduced_data_bits[:, subbyte_start_position:subbyte_start_position + signal.size]
-    
+
         # If the signal is in big endian, flip the bits to have a little endian representation.
         if not signal.is_little_endian:
             bit_data_trail = np.fliplr(bit_data_trail)
-    
+
         # Repackage as bytes, in little endian orientation.
         packed = np.packbits(bit_data_trail, axis=1, bitorder="little")
-    
+
         return packed
 
     @classmethod
@@ -80,7 +80,7 @@ class DecoderBase(object, metaclass=ABCMeta):
         :param data:    Frame data as an array of uint8 bytes.
         :return:        Array of raw signal values, in the smallest possible dtype.
         """
-    
+
         # Extract only the bits relevant for this signal.
         signal_data = cls._extract_signal_bits(signal, data)
 
@@ -91,10 +91,10 @@ class DecoderBase(object, metaclass=ABCMeta):
         signal_size_in_bytes = signal.size // 8
         if signal.size % 8 != 0:
             signal_size_in_bytes += 1
-    
+
         # Construct the corresponding unsigned datatype.
         signal_single_datatype = "<u{}".format(signal_size_in_bytes)
-    
+
         if len(signal_data.shape) == 1:
             # Frames with one dimension are simple to handle.
             new_shape = signal_data.shape[0]
@@ -103,31 +103,40 @@ class DecoderBase(object, metaclass=ABCMeta):
             # representations).
             next_size = 4 * (signal_size_in_bytes // 4 + 1)
             signal_single_datatype = "<u{}".format(next_size)
-        
+
             # Create a new array since additional data is needed to fit in the next datatype.
             expanded_data = np.empty((signal_data.shape[0], next_size), dtype=np.uint8)
-        
+
             # Copy the signal data into the LSB bytes.
             expanded_data[:, :signal_size_in_bytes] = signal_data
-        
+
             # Set the remainder to zero.
             expanded_data[:, signal_size_in_bytes:] = 0
-        
+
             signal_data = expanded_data
             new_shape = (data.shape[0], next_size)
         else:
             new_shape = (data.shape[0], signal_size_in_bytes)
-    
+
         # Reshape to a single dimension.
         try:
             reshaped_data = signal_data.reshape(new_shape)
         except ValueError as e:
             warnings.warn("Could not shape data for {}".format(signal), DataSizeMismatchWarning)
             return np.empty(shape=(new_shape[0], 0))
-    
+
+        def int_to_str(input_array):
+            import array
+            input_array = np.array(input_array)
+            input_array = input_array[input_array != 255]
+            return [array.array('b', input_array).tostring().decode('utf-8')]
+
+        if signal.unit == "char":
+            return np.apply_along_axis(int_to_str, 1, reshaped_data)
+
         # Interpret as single datatype.
         data_return = reshaped_data.view(dtype=signal_single_datatype)
-    
+
         return data_return
 
     @classmethod
@@ -138,19 +147,21 @@ class DecoderBase(object, metaclass=ABCMeta):
         :param data:    Raw data as an array of unsigned bytes.
         :return:        Array of decoded data.
         """
+        if signal.unit == 'char':
+            return data
         if signal.is_float:
             data = cls._handle_float_signal(signal, data)
         else:
             data = cls._handle_integer_signal(signal, data)
-    
+
         # Handle scaling to physical values if necessary.
         if signal.factor != 1:
             data = data * signal.factor
-    
+
         # Correct for any offsets if necessary.
         if signal.offset != 0:
             data = data + signal.offset
-    
+
         return data.astype(float)
 
     @staticmethod
@@ -161,10 +172,10 @@ class DecoderBase(object, metaclass=ABCMeta):
             result = data.view(dtype=np.float64)
         else:
             raise RuntimeError("Signal should be decoded as float, but is not 32 or 64 bits wide")
-    
+
         # Convert to float.
         result = result.astype(dtype=np.float64)
-    
+
         return result
 
     @staticmethod
@@ -174,23 +185,23 @@ class DecoderBase(object, metaclass=ABCMeta):
             # Create mask targeting the MSB in the signal.
             mask_msb_detect = data.dtype.type(2 ** (signal.size - 1))
             mask_signal_select = data.dtype.type(2 ** signal.size - 1)
-        
+
             # Get the indices where the signal is set.
             signed_bit_indices = np.where(data & mask_msb_detect)[0]
-        
+
             # Set all bits above the signal MSB to 1.
             msb_mask = data.dtype.type(np.iinfo(data.dtype.type).max) & ~mask_signal_select
-        
+
             # Update the places with the sign bit set.
             data[signed_bit_indices] = data[signed_bit_indices] | msb_mask
-        
+
             # Switch the datatype from unsigned to signed.
             signed_datatype = np.dtype("<i{}".format(data.dtype.itemsize))
-        
+
             result = data.view(dtype=signed_datatype)
         else:
             result = data
-    
+
         return result
-    
+
     pass

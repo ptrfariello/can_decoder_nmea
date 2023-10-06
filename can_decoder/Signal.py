@@ -11,7 +11,7 @@ class Signal(object):
     is_signed = False  # type: bool
     is_float = False  # type: bool
     signals = None  # type: Dict[int, List[Signal]]
-    
+
     def __init__(
             self,
             signal_name: str,
@@ -21,7 +21,8 @@ class Signal(object):
             signal_is_signed: bool = False,
             signal_is_float: bool = False,
             signal_factor: Union[int, float] = 1,
-            signal_offset: Union[int, float] = 0
+            signal_offset: Union[int, float] = 0,
+            unit=""
     ) -> None:
         self.name = signal_name
         self.factor = signal_factor
@@ -32,21 +33,22 @@ class Signal(object):
         self.is_signed = signal_is_signed
         self.is_float = signal_is_float
         self.signals = {}
-    
+        self.unit = unit
+
     @property
     def is_multiplexer(self):
         return len(self.signals) != 0
-    
+
     def add_multiplexed_signal(self, id, signal):
         mux_group = self.signals.get(id, None)
-        
+
         if mux_group is None:
             mux_group = []
             self.signals[id] = mux_group
-        
+
         mux_group.append(signal)
         return
-    
+
     def _get_tuple(self):
         return (
             self.name,
@@ -58,27 +60,27 @@ class Signal(object):
             self.is_signed,
             self.is_float,
         )
-    
+
     def __str__(self) -> str:
         name = self.name
-        
+
         if name == "":
             name = "Unnamed"
-        
+
         result = f"Signal \"{name}\" {self.start_bit}:{self.size}"
-        
+
         if self.is_multiplexer:
             result += f" multiplex for {len(self.signals)} group(s):"
-            
+
             for group_id, signals in self.signals.items():
                 result += f"\n\tGroup with ID {group_id} and {len(signals)} signal(s):"
-                
+
                 for signal in signals:
                     signal_str = str(signal)
 
                     for line in signal_str.splitlines():
                         result += f"\n\t\t{line}"
-                
+
         return result
 
     def __hash__(self) -> int:
@@ -87,7 +89,7 @@ class Signal(object):
     def __eq__(self, other) -> bool:
         if not isinstance(other, Signal):
             return NotImplemented
-    
+
         return self._get_tuple() == other._get_tuple()
 
     pass
