@@ -5,12 +5,12 @@ import warnings
 
 from typing import List, Optional
 
-from can_decoder.dataframe.DataFrameDecoder import DataFrameDecoder
-from can_decoder.Frame import Frame
-from can_decoder.Signal import Signal
-from can_decoder.SignalDB import SignalDB
-from can_decoder.support import get_j1939_limit
-from can_decoder.warnings.DataSizeMismatchWarning import DataSizeMismatchWarning
+from can_decoder_nmea.dataframe.DataFrameDecoder import DataFrameDecoder
+from can_decoder_nmea.Frame import Frame
+from can_decoder_nmea.Signal import Signal
+from can_decoder_nmea.SignalDB import SignalDB
+from can_decoder_nmea.support import get_j1939_limit
+from can_decoder_nmea.warnings.DataSizeMismatchWarning import DataSizeMismatchWarning
 
 
 class DataFrameJ1939Decoder(DataFrameDecoder):

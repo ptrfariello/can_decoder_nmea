@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 
 import pytest
-import can_decoder
+import can_decoder_nmea
 
 
 class TestIteratorManualJ1939(object):
@@ -9,14 +9,14 @@ class TestIteratorManualJ1939(object):
     @pytest.fixture()
     def db_j1939(self):
         # Setup decoding rules.
-        db = can_decoder.SignalDB(protocol="J1939")
+        db = can_decoder_nmea.SignalDB(protocol="J1939")
     
-        frame = can_decoder.Frame(
+        frame = can_decoder_nmea.Frame(
             frame_id=0x8CF004FE,
             frame_size=8
         )
     
-        signal_engine_speed = can_decoder.Signal(
+        signal_engine_speed = can_decoder_nmea.Signal(
             signal_name="EngineSpeed",
             signal_start_bit=24,
             signal_size=16,
@@ -55,7 +55,7 @@ class TestIteratorManualJ1939(object):
         ]
         
         expected = [
-            can_decoder.DecodedSignal(
+            can_decoder_nmea.DecodedSignal(
                 TimeStamp=timestamp,
                 CanID=id | 0x80000000,
                 Signal=signal_name,
@@ -65,7 +65,7 @@ class TestIteratorManualJ1939(object):
         ]
 
         # Setup UUT.
-        uut = can_decoder.IteratorDecoder(frames, db_j1939)
+        uut = can_decoder_nmea.IteratorDecoder(frames, db_j1939)
         
         result = list(uut)
         
@@ -88,9 +88,9 @@ class TestIteratorManualJ1939(object):
         ]
         
         # Setup UUT.
-        uut = can_decoder.IteratorDecoder(frames, db_j1939)
+        uut = can_decoder_nmea.IteratorDecoder(frames, db_j1939)
 
-        with pytest.warns(can_decoder.CANDecoderWarning):
+        with pytest.warns(can_decoder_nmea.CANDecoderWarning):
             result = list(uut)
 
         assert len(result) == 0

@@ -3,9 +3,9 @@ import canmatrix
 from os import PathLike
 from typing import Union, BinaryIO, Sequence, Optional
 
-from can_decoder.Frame import Frame
-from can_decoder.Signal import Signal
-from can_decoder.SignalDB import SignalDB
+from can_decoder_nmea.Frame import Frame
+from can_decoder_nmea.Signal import Signal
+from can_decoder_nmea.SignalDB import SignalDB
 
 
 def load_dbc(dbc_file: Union[str, PathLike, BinaryIO], *args, **kwargs) -> Optional[SignalDB]:

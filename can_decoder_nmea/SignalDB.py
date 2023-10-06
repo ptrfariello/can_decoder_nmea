@@ -1,7 +1,7 @@
 from typing import Optional, List
 
-from can_decoder.Frame import Frame
-from can_decoder.Signal import Signal
+from can_decoder_nmea.Frame import Frame
+from can_decoder_nmea.Signal import Signal
 
 
 class SignalDB(object):

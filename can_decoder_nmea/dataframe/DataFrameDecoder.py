@@ -4,8 +4,8 @@ from typing import List, Optional
 import numpy as np
 import pandas as pd
 
-from can_decoder.DecoderBase import DecoderBase
-from can_decoder.SignalDB import SignalDB
+from can_decoder_nmea.DecoderBase import DecoderBase
+from can_decoder_nmea.SignalDB import SignalDB
 
 
 class DataFrameDecoder(DecoderBase, metaclass=ABCMeta):
@@ -14,7 +14,7 @@ class DataFrameDecoder(DecoderBase, metaclass=ABCMeta):
     This class overrides :code:`__new__` in order to dynamically select the correct implementation, based on the
     registered sub-classes. An implementation is supplied for the generic case, as well as for J1939. To register
     decoders for other protocols, inherit from this class and implement
-    :py:meth:`can_decoder.DecoderBase.DecoderBase.get_supported_protocols`.
+    :py:meth:`can_decoder_nmea.DecoderBase.DecoderBase.get_supported_protocols`.
     """
     def __new__(cls, conversion_rules: SignalDB, *args, **kwargs):
         # Examine the protocol field.

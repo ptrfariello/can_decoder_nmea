@@ -1,7 +1,7 @@
 import pytest
-from can_decoder.Signal import Signal
+from can_decoder_nmea.Signal import Signal
 
-from can_decoder.support import is_valid_j1939_signal
+from can_decoder_nmea.support import is_valid_j1939_signal
 
 
 class TestJ1939Support(object):

@@ -1,4 +1,4 @@
-import can_decoder
+import can_decoder_nmea
 import mdf_iter
 
 from pathlib import Path
@@ -27,7 +27,7 @@ def example_decode_using_iterator_j1939():
     log_file = "{}/00000001/00000001.MF4".format(device)
     
     # Import the decoding rules.
-    db = can_decoder.load_dbc(dbc_path)
+    db = can_decoder_nmea.load_dbc(dbc_path)
     
     with fs.open(log_file, "rb") as handle:
         # Open the file and extract an iterator for raw CAN records.
@@ -36,7 +36,7 @@ def example_decode_using_iterator_j1939():
         raw_iterator = mdf_file.get_can_iterator()
         
         # Wrap the raw iterator with the decoder.
-        wrapped_iterator = can_decoder.IteratorDecoder(raw_iterator, db)
+        wrapped_iterator = can_decoder_nmea.IteratorDecoder(raw_iterator, db)
     
         ctr = 0
         for signal in wrapped_iterator:
@@ -61,7 +61,7 @@ def example_decode_using_iterator_obd2():
     log_file = "{}/00000001/00000001.MF4".format(device)
     
     # Import the decoding rules.
-    db = can_decoder.load_dbc(dbc_path)
+    db = can_decoder_nmea.load_dbc(dbc_path)
     
     with fs.open(log_file, "rb") as handle:
         # Open the file and extract an iterator for raw CAN records.
@@ -70,7 +70,7 @@ def example_decode_using_iterator_obd2():
         raw_iterator = mdf_file.get_can_iterator()
         
         # Wrap the raw iterator with the decoder.
-        wrapped_iterator = can_decoder.IteratorDecoder(raw_iterator, db)
+        wrapped_iterator = can_decoder_nmea.IteratorDecoder(raw_iterator, db)
         
         ctr = 0
         for signal in wrapped_iterator:

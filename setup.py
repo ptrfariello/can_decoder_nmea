@@ -28,7 +28,7 @@ setuptools.setup(
     ],
     long_description=long_description,
     long_description_content_type="text/markdown",
-    name="can_decoder",
+    name="can_decoder_nmea",
     packages=setuptools.find_packages(),
     python_requires='>=3.5',
     url="https://github.com/CSS-Electronics/can_decoder",

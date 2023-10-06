@@ -4,11 +4,11 @@ from abc import abstractmethod, ABCMeta
 from datetime import datetime
 from typing import Iterable
 
-from can_decoder.DecoderBase import DecoderBase
-from can_decoder.Signal import Signal
-from can_decoder.SignalDB import SignalDB
-from can_decoder.iterator.can_record import can_record
-from can_decoder.iterator.DecodedSignal import DecodedSignal
+from can_decoder_nmea.DecoderBase import DecoderBase
+from can_decoder_nmea.Signal import Signal
+from can_decoder_nmea.SignalDB import SignalDB
+from can_decoder_nmea.iterator.can_record import can_record
+from can_decoder_nmea.iterator.DecodedSignal import DecodedSignal
 
 
 class IteratorDecoder(DecoderBase, metaclass=ABCMeta):

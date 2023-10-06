@@ -3,10 +3,10 @@ from typing import Dict, List, Optional
 import numpy as np
 import pandas as pd
 
-from can_decoder.dataframe.DataFrameDecoder import DataFrameDecoder
-from can_decoder.Frame import Frame
-from can_decoder.Signal import Signal
-from can_decoder.SignalDB import SignalDB
+from can_decoder_nmea.dataframe.DataFrameDecoder import DataFrameDecoder
+from can_decoder_nmea.Frame import Frame
+from can_decoder_nmea.Signal import Signal
+from can_decoder_nmea.SignalDB import SignalDB
 
 
 class DataFrameGenericDecoder(DataFrameDecoder):
