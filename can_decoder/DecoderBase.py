@@ -162,11 +162,13 @@ class DecoderBase(object, metaclass=ABCMeta):
         if signal.offset != 0:
             data = data + signal.offset
 
+        data = data.astype(float)
+
         if signal.valid_range == (0, 0):
-            return data.astype(float)
+            return data
 
         data = data[(data < signal.valid_range[0]) | (data > signal.valid_range[1])] = np.nan
-        return data.astype(float)
+        return data
 
 
     @staticmethod
