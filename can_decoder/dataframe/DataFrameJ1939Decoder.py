@@ -156,10 +156,8 @@ class DataFrameJ1939Decoder(DataFrameDecoder):
 
         # Create a new DataFrame to contain the results.
         result = pd.DataFrame(index=signal_index[valid_indices])
-        print(signal_data_raw)
         # Get raw and decoded data.
         signal_data_raw = signal_data_raw[valid_indices]
-        print(signal_data_raw)
         signal_data = self._decode_signal_raw_to_phys(signal, signal_data_raw)
 
         # Add custom fields.
