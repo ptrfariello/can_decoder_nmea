@@ -150,7 +150,8 @@ class DBCLoader(object):
             signal_is_little_endian=dbc_signal.is_little_endian,
             signal_factor=dbc_signal.factor,
             signal_offset=dbc_signal.offset,
-            unit=dbc_signal.unit
+            unit=dbc_signal.unit,
+            valid_range=(dbc_signal.min, dbc_signal.max)
         )
 
         if self._use_custom_attribute is not None:

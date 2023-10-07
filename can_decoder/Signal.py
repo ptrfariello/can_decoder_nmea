@@ -11,6 +11,8 @@ class Signal(object):
     is_signed = False  # type: bool
     is_float = False  # type: bool
     signals = None  # type: Dict[int, List[Signal]]
+    unit = ""
+    valid_range = (0, 0)
 
     def __init__(
             self,
@@ -22,7 +24,8 @@ class Signal(object):
             signal_is_float: bool = False,
             signal_factor: Union[int, float] = 1,
             signal_offset: Union[int, float] = 0,
-            unit=""
+            unit="",
+            valid_range=(0, 0)
     ) -> None:
         self.name = signal_name
         self.factor = signal_factor
@@ -34,6 +37,7 @@ class Signal(object):
         self.is_float = signal_is_float
         self.signals = {}
         self.unit = unit
+        self.valid_range = valid_range
 
     @property
     def is_multiplexer(self):
