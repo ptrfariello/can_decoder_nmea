@@ -129,7 +129,10 @@ class DecoderBase(object, metaclass=ABCMeta):
             import array
             input_array = np.array(input_array)
             input_array = input_array[input_array != 255]
-            return [array.array('b', input_array).tobytes().decode('utf-8').strip()]
+            input_array = [array.array('b', input_array).tobytes().decode('utf-8').strip()]
+            input_array = np.where(input_array == '', np.nan, input_array)
+            return input_array
+
 
         if signal.unit == "char":
             return np.apply_along_axis(int_to_str, 1, reshaped_data)
