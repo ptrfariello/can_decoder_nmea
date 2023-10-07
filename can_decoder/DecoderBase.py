@@ -167,7 +167,7 @@ class DecoderBase(object, metaclass=ABCMeta):
         if signal.valid_range == (0, 0):
             return data
 
-        data = data[(data < signal.valid_range[0]) | (data > signal.valid_range[1])] = np.nan
+        data[(data < signal.valid_range[0]) | (data > signal.valid_range[1])] = np.nan
         return data
 
 
