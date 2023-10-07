@@ -129,9 +129,9 @@ class DecoderBase(object, metaclass=ABCMeta):
             import array
             input_array = np.array(input_array)
             input_array = input_array[input_array != 255]
-            input_array = [array.array('b', input_array).tobytes().decode('utf-8').strip()]
-            input_array = np.where(input_array == '', np.nan, input_array)
-            return input_array
+            input_array = array.array('b', input_array).tobytes().decode('utf-8').strip()
+            input_array = np.where(input_array.isdigit(), input_array, input_array+"#")
+            return [input_array]
 
 
         if signal.unit == "char":
