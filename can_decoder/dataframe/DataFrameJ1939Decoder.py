@@ -150,7 +150,7 @@ class DataFrameJ1939Decoder(DataFrameDecoder):
             limit = get_j1939_limit(signal.size)
             valid_indices = np.argwhere(signal_data_raw < limit)[:, 0]
 
-        if valid_indices.shape[0] == 0 or signal_data_raw.shape[0] == 0:
+        if valid_indices.shape[0] == 0 or np.any(signal_data_raw):
             # Early skip if no valid data is located.
             return
 
