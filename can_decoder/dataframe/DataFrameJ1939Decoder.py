@@ -150,16 +150,16 @@ class DataFrameJ1939Decoder(DataFrameDecoder):
             limit = get_j1939_limit(signal.size)
             valid_indices = np.argwhere(signal_data_raw < limit)[:, 0]
 
-        if valid_indices.shape[0] == 0 or np.any(signal_data_raw):
+        if valid_indices.shape[0] == 0 or (not np.any(signal_data_raw)):
             # Early skip if no valid data is located.
             return
 
         # Create a new DataFrame to contain the results.
         result = pd.DataFrame(index=signal_index[valid_indices])
-
+        print(signal_data_raw)
         # Get raw and decoded data.
         signal_data_raw = signal_data_raw[valid_indices]
-
+        print(signal_data_raw)
         signal_data = self._decode_signal_raw_to_phys(signal, signal_data_raw)
 
         # Add custom fields.
