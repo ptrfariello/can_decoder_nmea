@@ -204,7 +204,6 @@ class DataFrameJ1939Decoder(DataFrameDecoder):
         unique_pgns = np.unique(raw_pgns)
 
         # Extract and decode each PGN in turn.
-        print(unique_pgns)
         for pgn in unique_pgns:
             # Determine if this PGN is supported.
             frame = self._frames.get(pgn, None)
